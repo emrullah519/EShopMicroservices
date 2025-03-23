@@ -56,7 +56,7 @@ namespace Ordering.Infrastructure.Data.Configurations
             builder.ComplexProperty(p => p.Payment, builder =>
             {
                 builder.Property(p => p.CardName).HasMaxLength(50);
-                builder.Property(p=>p.CardNumber).HasMaxLength(24).IsRequired();
+                builder.Property(p => p.CardNumber).HasMaxLength(24).IsRequired();
                 builder.Property(p => p.Expiration).HasMaxLength(10);
                 builder.Property(p => p.CVV).HasMaxLength(3);
                 builder.Property(p => p.PaymentMethod);

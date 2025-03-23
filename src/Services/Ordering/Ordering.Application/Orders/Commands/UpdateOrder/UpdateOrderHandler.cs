@@ -5,10 +5,10 @@
     {
         public async Task<UpdateOrderResult> Handle(UpdateOrderCommand command, CancellationToken cancellationToken)
         {
-            var orderId = OrderId.Of(command.orderDto.Id);
+            var orderId = OrderId.Of(command.Order.Id);
             var order = await ctx.Orders.FindAsync([orderId], cancellationToken)
-                ?? throw new OrderNotFoundException(command.orderDto.Id);
-            UpdateOrderWithNewValues(order, command.orderDto);
+                ?? throw new OrderNotFoundException(command.Order.Id);
+            UpdateOrderWithNewValues(order, command.Order);
             ctx.Orders.Update(order);
             await ctx.SaveChangesAsync(cancellationToken);
             return new UpdateOrderResult(true);
