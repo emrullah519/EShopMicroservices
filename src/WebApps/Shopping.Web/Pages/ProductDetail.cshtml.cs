@@ -6,14 +6,19 @@ using Shopping.Web.Services;
 
 namespace Shopping.Web.Pages
 {
-    public class IndexModel(ICatalogService catalogService,IBasketService basketService ,ILogger<IndexModel> logger) : PageModel
+    public class ProductDetailModel
+        (ICatalogService catalogService, IBasketService basketService, ILogger<ProductDetailModel> logger)
+        : PageModel
     {
-        public IEnumerable<ProductModel> ProductList { get; set; } = new List<ProductModel>();
-        public async Task<IActionResult> OnGetAsync()
+        public ProductModel Product { get; set; } = default!;
+        [BindProperty]
+        public string Color { get; set; } = default!;
+        [BindProperty]
+        public int Quantity { get; set; } = default!;
+        public async Task<IActionResult> OnGetAsync(Guid productId)
         {
-            logger.LogInformation("Index page visited");
-            var result = await catalogService.GetProducts();
-            ProductList = result.Products;
+            var response = await catalogService.GetProduct(productId);
+            Product = response.Product;
             return Page();
         }
         public async Task<IActionResult> OnPostAddToCartAsync(Guid productId)
@@ -24,13 +29,13 @@ namespace Shopping.Web.Pages
             basket.Items.Add(new ShoppingCartItemModel
             {
                 ProductId = productId,
-                Price = productResponse.Product.Price,
                 ProductName = productResponse.Product.Name,
-                Quantity = 1,
-                Color = "Black"
+                Price = productResponse.Product.Price,
+                Color = "Black",
+                Quantity = 1
             });
             await basketService.StoreBasket(new StoreBasketRequest(basket));
-            return RedirectToPage("/Cart");
+            return RedirectToPage("Cart");
         }
     }
 }

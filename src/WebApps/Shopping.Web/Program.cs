@@ -11,7 +11,16 @@ builder.Services.AddRefitClient<ICatalogService>()
     {
         opt.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]!);
     });
-
+builder.Services.AddRefitClient<IBasketService>()
+    .ConfigureHttpClient(opt =>
+    {
+        opt.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]!);
+    });
+builder.Services.AddRefitClient<IOrderingService>()
+    .ConfigureHttpClient(opt =>
+    {
+        opt.BaseAddress = new Uri(builder.Configuration["ApiSettings:GatewayAddress"]!);
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
